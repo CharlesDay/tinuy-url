@@ -4,7 +4,7 @@ spring:
   data:
     redis:
       database: 0
-      host: short-urls.azurewebsites.net
+      host: toggle-service.redis.cache.windows.net
       password: ${REDIS_PRIMARY_PASSWORD}
       port: 6380
       ssl:
