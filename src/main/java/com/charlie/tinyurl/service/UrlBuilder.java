@@ -2,6 +2,7 @@ package com.charlie.tinyurl.service;
 
 import com.charlie.tinyurl.model.Url;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -9,8 +10,15 @@ import java.util.UUID;
 @Service
 public class UrlBuilder {
 
-    @Autowired
     UrlRepository urlRepository;
+
+    String serverBaseUrl;
+
+    @Autowired
+    public UrlBuilder(UrlRepository urlRepository, @Value("${server.base.url}") String serverBaseUrl) {
+        this.urlRepository = urlRepository;
+        this.serverBaseUrl = serverBaseUrl;
+    }
 
     public Url buildUrl(String longUrl) {
         return createUniqueUrl(longUrl);
