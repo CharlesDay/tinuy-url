@@ -195,7 +195,6 @@ class UrlControllerTest {
 
         // Assert
         assertEquals("url-form", result);
-        verify(model).addAttribute("shortUrl", null);
         verify(model).addAttribute("url", longUrl);
         verify(model).addAttribute("shortUrl", shortUrl);
         verifyNoMoreInteractions(model);
