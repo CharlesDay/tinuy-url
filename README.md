@@ -6,7 +6,7 @@ Uses Thymeleaf in order to display a basic UI that the user can interact with as
 ![img](./example.png)
 
 Uses GitHub Actions CI/CD to deploy to Azure App Service, and Azure Redis.
-[See](https://short-urls.azurewebsites.net/url)
+See: https://short-urls.azurewebsites.net/url
 
 ## Running Locally
 
