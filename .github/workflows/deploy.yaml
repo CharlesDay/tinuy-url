@@ -6,7 +6,8 @@ env:
 
 on:
   push:
-    main
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
