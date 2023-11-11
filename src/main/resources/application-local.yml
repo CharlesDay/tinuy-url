@@ -1,9 +1,9 @@
 spring:
   cache:
     type: simple
-  redis:
-    database: 0
-    host: localhost
-    username: ""
-    password: ""
-    port: 6379
+  data:
+    redis:
+      database: 0
+      host: localhost
+      password:
+      port: 6379
