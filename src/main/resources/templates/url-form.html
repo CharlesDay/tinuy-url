@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>URL Shortener</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        #container {
+            background-color: #fff;
+            padding: 60px; /* Increased padding */
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 780px; /* Increased width */
+        }
+
+        h2 {
+            color: #007bff;
+            margin-bottom: 36px; /* Increased margin */
+            font-size: 33.6px; /* Increased font size */
+        }
+
+        form {
+            margin-top: 36px; /* Increased margin */
+        }
+
+        label {
+            font-size: 28.8px; /* Increased font size */
+            display: block;
+            margin-bottom: 16.8px; /* Increased margin */
+            color: #495057;
+        }
+
+        p {
+            font-size: 28.8px; /* Increased font size */
+            color: #495057;
+        }
+
+        input {
+            width: 100%;
+            padding: 21.6px; /* Increased padding */
+            margin-bottom: 31.2px; /* Increased margin */
+            box-sizing: border-box;
+            border: 1px solid #ced4da;
+            border-radius: 9.6px; /* Increased border radius */
+            font-size: 21.6px; /* Increased font size */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 24px 36px; /* Increased padding */
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            font-size: 28.8px; /* Increased font size */
+            border-radius: 12px; /* Increased border radius */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #shortUrlContainer {
+            margin-top: 36px; /* Increased margin */
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        #shortUrlContainer a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 24px; /* Increased font size */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        #shortUrlContainer a:hover {
+            text-decoration: underline;
+        }
+
+        #container:hover #shortUrlContainer {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+<div id="container">
+    <h2>URL Shortener</h2>
+
+    <form th:action="@{/url}" method="post" id="urlForm">
+        <label for="longUrl">Long URL:</label>
+        <input type="text" id="longUrl" name="url" th:value="${url}" autocomplete="off" required placeholder="Enter your long URL" />
+        <button type="submit">Generate Short URL</button>
+    </form>
+
+    <div id="shortUrlContainer">
+        <p>Short URL: <a th:if="${shortUrl}" th:href="${shortUrl}" th:text="${shortUrl}" target="_blank"></a></p>
+    </div>
+</div>
+</body>
+</html>
