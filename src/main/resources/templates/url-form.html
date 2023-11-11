@@ -93,6 +93,21 @@
         #container:hover #shortUrlContainer {
             opacity: 1;
         }
+
+                #copyButton {
+            background-color: #28a745; /* Green color for the copy button */
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 8px;
+            margin-left: 10px; /* Added margin to separate from the short URL */
+        }
+
+        #copyButton:hover {
+            background-color: #218838;
+        }
     </style>
 </head>
 <body>
@@ -106,8 +121,39 @@
     </form>
 
     <div id="shortUrlContainer">
-        <p>Short URL: <a th:if="${shortUrl}" th:href="${shortUrl}" th:text="${shortUrl}" target="_blank"></a></p>
+        <p>
+            Short URL: <a th:href="${shortUrl}" th:text="${shortUrl}" target="_blank"></a>
+        </p>
+        <button th:if="${shortUrl != null and !shortUrl.isEmpty()}" id="copyButton" onclick="copyToClipboard()">Copy to Clipboard</button>
     </div>
 </div>
+
+<script>
+    function copyToClipboard() {
+        var shortUrlElement = document.querySelector('#shortUrlContainer a');
+        var tempInput = document.createElement('input');
+        tempInput.value = shortUrlElement.href;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempInput);
+
+        var copyButton = document.querySelector('#copyButton');
+        copyButton.innerText = 'Copied!';
+        copyButton.style.backgroundColor = '#5cb85c'; // Green color indicating success
+
+        setTimeout(function () {
+            copyButton.innerText = 'Copy to Clipboard';
+            copyButton.style.backgroundColor = '#28a745'; // Original button color
+        }, 2000); // Reset the button after 2 seconds
+    }
+
+    // Show the copy button when shortUrl is not null or empty
+    var shortUrl = document.querySelector('#shortUrlContainer a');
+    if (shortUrl) {
+        document.querySelector('#copyButton').style.display = 'inline-block';
+    }
+</script>
+
 </body>
 </html>

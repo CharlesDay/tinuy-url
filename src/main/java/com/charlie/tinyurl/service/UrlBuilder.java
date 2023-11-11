@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -25,6 +26,10 @@ public class UrlBuilder {
     }
 
     private Url createUniqueUrl(String longUrl) {
+
+        Optional<Url> urlByLongId = urlRepository.findByLongUrl(longUrl);
+        if (urlByLongId.isPresent()) return urlByLongId.get();
+
         String key = UUID.randomUUID().toString().substring(0, 5);
         String tinyUrl = serverBaseUrl + key;
 
