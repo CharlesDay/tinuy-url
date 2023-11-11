@@ -26,7 +26,7 @@ public class UrlBuilder {
 
     private Url createUniqueUrl(String longUrl) {
         String key = UUID.randomUUID().toString().substring(0, 5);
-        String tinyUrl = String.format("http://localhost:8080/%s", key);
+        String tinyUrl = serverBaseUrl + key;
 
         Url createdUrl;
         while (true) {
