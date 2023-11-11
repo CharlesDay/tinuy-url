@@ -11,5 +11,8 @@ spring:
         enabled: true
 
 server:
+  fraud:
+    url: https://www.ipqualityscore.com/api/json/url/
+    token: ${FRAUD_API_TOKEN}
   base:
     url: https://short-urls.azurewebsites.net/

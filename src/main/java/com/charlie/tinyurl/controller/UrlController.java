@@ -31,9 +31,15 @@ public class UrlController {
             if (!url.startsWith("http")){
                 url = "https://" + url;
             }
-            Url urlSaved = urlRepository.save(urlBuilder.buildUrl(url));
+            Url builtUrl = urlBuilder.buildUrl(url);
+            if (builtUrl == null) {
+                model.addAttribute("error", "Unsafe url, it will not be shortened");
+                return "url-form";
+            }
+            Url urlSaved = urlRepository.save(builtUrl);
             redirectAttributes.addFlashAttribute("longUrl", urlSaved.getLongUrl());
             redirectAttributes.addFlashAttribute("shortUrl", urlSaved.getTinyUrl());
+            redirectAttributes.addFlashAttribute("error", null);
             return "redirect:/url";
         }
         model.addAttribute("error", "Missing field: url");
@@ -66,10 +72,12 @@ public class UrlController {
     @GetMapping("/url")
     public String showUrlForm(@ModelAttribute("longUrl") String longUrl,
                               @ModelAttribute("shortUrl") String shortUrl,
+                              @ModelAttribute("error") String error,
                               Model model) {
         // Clear the shortUrl attribute to ensure it's not displayed on the initial load
 
         model.addAttribute("url", longUrl);
+        model.addAttribute("error", error);
         model.addAttribute("shortUrl", shortUrl);
 
         return "url-form";

@@ -121,6 +121,7 @@
     </form>
 
     <div id="shortUrlContainer">
+        <p th:if="${error != null and !error.isEmpty()}" style="color: red;" th:text="${error}"></p>
         <p>
             Short URL: <a th:href="${shortUrl}" th:text="${shortUrl}" target="_blank"></a>
         </p>

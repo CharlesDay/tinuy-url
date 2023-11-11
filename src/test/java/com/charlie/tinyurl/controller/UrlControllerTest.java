@@ -83,6 +83,7 @@ class UrlControllerTest {
         verify(urlRepository).save(any(Url.class));
         verify(redirectAttributes).addFlashAttribute("longUrl", expectedLongUrl);
         verify(redirectAttributes).addFlashAttribute("shortUrl", expectedShortUrl);
+        verify(redirectAttributes).addFlashAttribute("error", null);
         verifyNoMoreInteractions(urlBuilder, urlRepository, redirectAttributes, model);
     }
 
@@ -111,6 +112,7 @@ class UrlControllerTest {
         verify(urlRepository).save(any(Url.class));
         verify(redirectAttributes).addFlashAttribute("longUrl", expectedLongUrl);
         verify(redirectAttributes).addFlashAttribute("shortUrl", expectedShortUrl);
+        verify(redirectAttributes).addFlashAttribute("error", null);
         verifyNoMoreInteractions(urlBuilder, urlRepository, redirectAttributes, model);
     }
 
@@ -191,24 +193,26 @@ class UrlControllerTest {
         String shortUrl = "http://short.url";
 
         // Act
-        String result = urlController.showUrlForm(longUrl, shortUrl, model);
+        String result = urlController.showUrlForm(longUrl, shortUrl, null, model);
 
         // Assert
         assertEquals("url-form", result);
         verify(model).addAttribute("url", longUrl);
         verify(model).addAttribute("shortUrl", shortUrl);
+        verify(model).addAttribute("error", null);
         verifyNoMoreInteractions(model);
     }
 
     @Test
     void testShowUrlFormWithoutAttributes() {
         // Act
-        String result = urlController.showUrlForm(null, null, model);
+        String result = urlController.showUrlForm(null, null, null, model);
 
         // Assert
         assertEquals("url-form", result);
         verify(model).addAttribute("shortUrl", null);
         verify(model).addAttribute("url", null);
+        verify(model).addAttribute("error", null);
         verifyNoMoreInteractions(model);
     }
 }
