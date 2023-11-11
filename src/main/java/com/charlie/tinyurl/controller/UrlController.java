@@ -1,20 +1,21 @@
 package com.charlie.tinyurl.controller;
 
-import com.charlie.tinyurl.model.IncomingUrl;
 import com.charlie.tinyurl.model.Url;
 import com.charlie.tinyurl.service.UrlBuilder;
 import com.charlie.tinyurl.service.UrlRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Optional;
 
-@RestController
+@Controller
 @RequestMapping()
 @Slf4j
 public class UrlController {
@@ -25,14 +26,29 @@ public class UrlController {
     @Autowired
     UrlBuilder urlBuilder;
 
-    @PostMapping
-    public ResponseEntity<?> saveUrl(@RequestBody IncomingUrl url) {
-        if (url == null || !StringUtils.hasText(url.url())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Missing field: url");
+    @PostMapping("/url")
+    public String saveUrl(@RequestParam(required = false) String url, Model model, RedirectAttributes redirectAttributes) {
+        if (url != null) {
+            // Form submission
+            if (!StringUtils.hasText(url)) {
+                model.addAttribute("error", "Missing field: url");
+                return "url-form";
+            } else {
+                Url urlSaved = urlRepository.save(urlBuilder.buildUrl(url));
+                redirectAttributes.addFlashAttribute("longUrl", urlSaved.getLongUrl());
+                redirectAttributes.addFlashAttribute("shortUrl", urlSaved.getTinyUrl());
+                return "redirect:/url";
+            }
+        } else {
+            // Initial load
+            // Clear the shortUrl attribute to ensure it's not displayed on the initial load
+            model.addAttribute("shortUrl", null);
+            // Initialize an empty IncomingUrl object to be used in the form
+            model.addAttribute("url", "");
+            return "url-form";
         }
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(urlRepository.save(urlBuilder.buildUrl(url.url())));
     }
+
 
     @GetMapping("/{id}")
     public void redirect(HttpServletResponse httpServletResponse, @PathVariable String id) {
@@ -54,5 +70,19 @@ public class UrlController {
 
         return ResponseEntity.notFound().build();
 
+    }
+
+    @GetMapping("/url")
+    public String showUrlForm(@ModelAttribute("longUrl") String longUrl,
+                              @ModelAttribute("shortUrl") String shortUrl,
+                              Model model) {
+        // Clear the shortUrl attribute to ensure it's not displayed on the initial load
+        model.addAttribute("shortUrl", null);
+
+        // Initialize an empty IncomingUrl object to be used in the form
+        model.addAttribute("url", longUrl);
+        model.addAttribute("shortUrl", shortUrl);
+
+        return "url-form";
     }
 }
