@@ -5,10 +5,8 @@ import com.charlie.tinyurl.model.UserPreferences;
 import com.charlie.tinyurl.service.UserPreferencesRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -53,5 +51,11 @@ public class UserPreferenceController {
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("An error occurred while saving preferences");
         }
+    }
+
+    @PostMapping("/clear")
+    public ResponseEntity<?> clearCache() {
+        userPreferencesRepository.deleteAll();
+        return ResponseEntity.ok().build();
     }
 }
